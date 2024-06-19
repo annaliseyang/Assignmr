@@ -69,4 +69,4 @@ class Protein:
         return self.sequence
 
     def __get__(self, index):
-        pass
+        return self.sequence[index]
