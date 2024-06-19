@@ -3,7 +3,7 @@ import pandas as pd
 ######################################################################
 
 class AminoAcid:
-    amino_acid_dict = {
+    __amino_acid_dict = {
         'A': 'Ala',
         'R': 'Arg',
         'N': 'Asn',
@@ -24,95 +24,157 @@ class AminoAcid:
         'W': 'Trp',
         'Y': 'Tyr',
         'V': 'Val',
-
-        'Ala': 'A',
-        'Arg': 'R',
-        'Asn': 'N',
-        'Asp': 'D',
-        'Cys': 'C',
-        'Gln': 'Q',
-        'Glu': 'E',
-        'Gly': 'G',
-        'His': 'H',
-        'Ile': 'I',
-        'Leu': 'L',
-        'Lys': 'K',
-        'Met': 'M',
-        'Phe': 'F',
-        'Pro': 'P',
-        'Ser': 'S',
-        'Thr': 'T',
-        'Trp': 'W',
-        'Tyr': 'Y',
-        'Val': 'V'
     }
 
+    __amino_acid_dict.update( {v: k for k, v in __amino_acid_dict.items()} )
 
-    def __init__(self, letter_code: str, atoms: list, chemical_shifts: pd.DataFrame):
-        letter_code_2 = self.amino_acid_dict[letter_code]
+    with open('chemical_shifts.csv', 'r') as f:
+        __chemical_shifts = pd.read_csv(f)
 
-        match(len(letter_code)):
+    def get_chemical_shifts():
+        return AminoAcid.__chemical_shifts
+
+    def __init__(self, id: str):
+        id_2 = self.__amino_acid_dict[id]
+        match(len(id)):
             case 1:
-                self.one_letter_code = letter_code
-                self.three_letter_code = letter_code_2 
+                self.__one_letter_code = id
+                self.__three_letter_code = id_2 
             case 3:
-                self.one_letter_code = letter_code_2
-                self.three_letter_code = letter_code 
+                self.__one_letter_code = id_2
+                self.__three_letter_code = id 
 
-        self.atoms = atoms
-        self.atoms_assignment_states = { atom: False for atom in atoms }
-        self.chemical_shifts = chemical_shifts
-
-
-    def __str__(self):
-        return f"AminoAcid: {self.one_letter_code} {self.three_letter_code} {self.is_assigned_all()}\nAtoms: {self.atoms}\nChemical Shifts: {self.chemical_shifts}"
+        df_atoms = AminoAcid.__chemical_shifts[ AminoAcid.__chemical_shifts['comp_id'] == self.__three_letter_code ]
+        self.__atoms_assignment_states = { atom: False for atom in df_atoms['atom_id'].to_list() }
 
 
-    def assign_atom(self, atom):
-        self.atoms_assignment_states[atom] = True
+    def __str__(self) -> str:
+        df_atoms = AminoAcid.__chemical_shifts[AminoAcid.__chemical_shifts['comp_id'] == self.three_letter_code]
+        return f"AminoAcid: {self.__one_letter_code} {self.__three_letter_code} {self.is_assigned()}\nAtoms: {self.__atoms_assignment_states}\nChemical Shifts: {df_atoms}\n"
+
+    @property
+    def one_letter_code(self) -> str:
+        return self.__one_letter_code 
+    
+    @property
+    def three_letter_code(self) -> str:
+        return self.__three_letter_code 
 
 
-    def get_atom_assign(self, atom):
-        return self.atoms_assignment_states[atom]
+    def get_atoms(self) -> list:
+        return list(self.__atoms_assignment_states.keys())
 
 
-    def is_assigned_all(self):
-        return all(self.atoms_assignment_states.values())
+    def assign_atom(self, atom) -> None:
+        match self.__atoms_assignment_states.get(atom):
+            case False: self.__atoms_assignment_states[atom] = True
+            case True: return
+            case _: raise ValueError(f"The atom of {atom} do NOT exist! ")
+
+
+    def is_assigned(self, atom = None) -> bool:
+        return all(self.__atoms_assignment_states.values()) if atom is None else self.__atoms_assignment_states[atom]
 
 
 class Protein:
-    def __init__(self, sequence, atoms: list, chemical_shifts: pd.DataFrame):
-        self.sequence = sequence
-        self.atoms = atoms
-        self.chemical_shifts = chemical_shifts
-        self.amino_acids = [ AminoAcid( letter_code, atoms, chemical_shifts) for letter_code in sequence]
+    def __init__(self, sequence: str) -> None:
+        self.__sequence = sequence
+        self.__amino_acids = [AminoAcid(id) for id in sequence]
 
-    def __str__(self):
-        return f"sequence Len = {len(self.sequence)} {self.sequence}\nAtoms: {self.atoms}\nChemical Shifts: {self.chemical_shifts}"
+
+    def __str__(self) -> str:
+        str_amino_acids = [f"{index} {aa}" for index, aa in enumerate(self.__amino_acids)]
+        return f"Protein Sequence: Len = {len(self.__sequence)} {self.__sequence}\n\n{"\n".join(str_amino_acids)}"
+
+
+    def get_sequence(self) -> str:
+        return self.__sequence
+
 
     def __getitem__(self, index):
-        return self.amino_acids[index]
+        return self.__amino_acids[index]
+    
+
+    def is_assigned(self, index = None, atom = None) -> bool:
+        return all( [aa.is_assigned(atom) for aa in self.__amino_acids] ) if index is None else self.__amino_acids[index].is_assigned(atom)
+
+
+    def assign(self, index, atom) -> None:
+        self.__amino_acids[index].assign_atom(atom)
+
+
+class Peptide(Protein):
+    def __init__(self, sequence: str, range: tuple) -> None:
+        super().__init__(sequence)
+        self.__range = range 
+
+
+    def __str__(self) -> str:
+        sequence = super().get_sequence()
+        sequence_peptide = super().get_sequence()[self.__range[0]:self.__range[1]]
+        str_amino_acids = [f"{index} {super().__getitem__(index)}" for index in range(self.__range[0], self.__range[1])]
+        return f"Protein Sequence: Len = {len(sequence)} {sequence}\n" +\
+            f"Peptide Sequence: Len = {len(sequence_peptide)} {self.__range} {sequence_peptide}\n\n" +\
+            '\n'.join(str_amino_acids)
+
+
+    def get_sequence(self, full_sequence = False) -> str:
+        sequence = super().get_sequence()
+        return sequence if full_sequence else sequence[self.__range[0]:self.__range[1]]
+
+
+    def is_assigned(self, index = None, atom = None) -> bool:
+        if index is not None:
+            return super().is_assigned(index, atom)
+        return all( [super().__getitem__(index).is_assigned(atom) for index in range(self.__range[0], self.__range[1])] )
+
+
+    def assign(self, index, atom) -> None:
+        if index < self.__range[0] or index >= self.__range[1]:
+            raise IndexError( f"The parameter of index ({index}) is out of range {self.__range}!" )
+        super().assign(index, atom)
+
 
 ##########################################################################################
 
-tau = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
-core = tau[263:399] # sequence of the tau rigid core
-print("Core Sequence:", core)
+if __name__ == "__main__":
+    tau = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
+    core = tau[263:399] # sequence of the tau rigid core
 
-with open('chemical_shifts.csv', 'r') as f:
-    cs = pd.read_csv(f)
-    print(cs.head(5))
+    with open('chemical_shifts.csv', 'r') as f:
+        cs = pd.read_csv(f)
+    #    print(cs.head(5))
 
-    aa_1 = AminoAcid('A', ['A', 'B', 'C'], cs)
-    aa_1.assign_atom('B')
-    print(aa_1)
+        aa_1 = AminoAcid('A')
+        aa_1.assign_atom(aa_1.get_atoms()[1])
+        print(aa_1.one_letter_code)
+        print(aa_1.three_letter_code)
+        print(aa_1.is_assigned(aa_1.get_atoms()[0]))
+        print(aa_1.is_assigned(aa_1.get_atoms()[1]))
+        print(aa_1.is_assigned())
+        print(aa_1.get_atoms())
+        print(aa_1)
 
-    aa_2 = AminoAcid('Glu', ['a', 'b', 'c'], cs)
-    aa_2.assign_atom('a')
-    aa_2.assign_atom('b')
-    aa_2.assign_atom('c')
-    print(aa_2)
+        aa_2 = AminoAcid('Glu')
+        aa_2.assign_atom(aa_2.get_atoms()[1])
+        aa_2.assign_atom(aa_2.get_atoms()[2])
+        aa_2.assign_atom(aa_2.get_atoms()[3])
+        print(aa_2)
 
-    protein_1 = Protein(core, 'XYZ', cs)
-    print(protein_1)
-    print(protein_1[10])
+        protein_1 = Protein(tau)
+        protein_1.assign(10, protein_1[10].get_atoms()[1])
+        print(protein_1)
+        print(protein_1.get_sequence())
+        print(protein_1.is_assigned(1, protein_1[1].get_atoms()[1]))
+        print(protein_1.is_assigned(1))
+        print(protein_1.is_assigned())
+        print(protein_1[0])
+
+        peptide_1 = Peptide(tau, (10, 15))
+        peptide_1.assign(10, peptide_1[10].get_atoms()[1])
+        print(peptide_1)
+        print(peptide_1.get_sequence())
+        print(peptide_1.is_assigned(1, peptide_1[1].get_atoms()[1]))
+        print(peptide_1.is_assigned(1))
+        print(peptide_1.is_assigned())
+        print(peptide_1[0])
