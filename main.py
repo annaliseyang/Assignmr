@@ -65,7 +65,7 @@ class AminoAcid:
 
 
     def __str__(self):
-        return f"AminoAcid: {self.one_letter_code} {self.three_letter_code} {self.is_assigned_all()}\n{self.atoms_assignment_states}\n{self.chemical_shifts}"
+        return f"AminoAcid: {self.one_letter_code} {self.three_letter_code} {self.is_assigned_all()}\nAtoms: {self.atoms}\nChemical Shifts: {self.chemical_shifts}"
 
 
     def assign_atom(self, atom):
@@ -88,7 +88,7 @@ class Protein:
         self.amino_acids = [ AminoAcid( letter_code, atoms, chemical_shifts) for letter_code in sequence]
 
     def __str__(self):
-        return self.sequence
+        return f"sequence Len = {len(self.sequence)} {self.sequence}\nAtoms: {self.atoms}\nChemical Shifts: {self.chemical_shifts}"
 
     def __getitem__(self, index):
         return self.amino_acids[index]
@@ -97,7 +97,7 @@ class Protein:
 
 tau = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
 core = tau[263:399] # sequence of the tau rigid core
-print("Core sequence:", core)
+print("Core Sequence:", core)
 
 with open('chemical_shifts.csv', 'r') as f:
     cs = pd.read_csv(f)
@@ -116,15 +116,3 @@ with open('chemical_shifts.csv', 'r') as f:
     protein_1 = Protein(core, 'XYZ', cs)
     print(protein_1)
     print(protein_1[10])
-
-# dictionary mapping amino acid one-letter codes to three-letter codes
-
-
-# for i, row in cs.iterrows():
-#     id = row['comp_id']
-#     new_id = id[0] + str.lower(id[1:])
-#     print(new_id)
-#     cs['comp_id'][i] = new_id
-
-# cs.to_csv('chemical_shifts.csv', index=False)
-
