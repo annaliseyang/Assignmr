@@ -35,7 +35,7 @@ class AminoAcid:
             return AminoAcid.__chemical_shifts
         match(len(amino_acid)):
             case 1:
-                amino_acid = AminoAcid.__amino_acid_dict[amino_acid] 
+                amino_acid = AminoAcid.__amino_acid_dict[amino_acid]
                 return AminoAcid.__chemical_shifts[AminoAcid.__chemical_shifts['comp_id'] == amino_acid]
             case 3:
                 return AminoAcid.__chemical_shifts[AminoAcid.__chemical_shifts['comp_id'] == amino_acid]
@@ -51,14 +51,21 @@ class AminoAcid:
             case 3:
                 self.__one_letter_code = id_2
                 self.__three_letter_code = id
+        cs = AminoAcid.__chemical_shifts
 
-        df_atoms = AminoAcid.__chemical_shifts[ AminoAcid.__chemical_shifts['comp_id'] == self.__three_letter_code ]
+        condition = [
+                (cs['atom_id'][row].startswith('C') or cs['atom_id'][row].startswith('N'))
+                and cs['comp_id'][row] == self.__three_letter_code
+                for row in range(len(cs['atom_id']))
+            ]
+
+        df_atoms = cs[condition]
         self.__atoms_assignment_states = { atom: False for atom in df_atoms['atom_id'].to_list() }
 
 
     def __str__(self) -> str:
         atoms_str = [ f"\033[1;33m{k}\033[0m" if v else f"{k}" for k, v in self.__atoms_assignment_states.items() ]
-        return f"AminoAcid: {self.__one_letter_code} {self.__three_letter_code} {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {", ".join(atoms_str)}\n"
+        return f"{self.__three_letter_code} ({self.one_letter_code}) {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {', '.join(atoms_str)}\n"
 
     @property
     def one_letter_code(self) -> str:
@@ -152,13 +159,13 @@ if __name__ == "__main__":
     #    print(cs.head(5))
 
         aa_1 = AminoAcid('A')
-        aa_1.assign_atom(aa_1.get_atoms()[1])
-        print(aa_1.one_letter_code)
-        print(aa_1.three_letter_code)
-        print(aa_1.is_assigned(aa_1.get_atoms()[0]))
-        print(aa_1.is_assigned(aa_1.get_atoms()[1]))
-        print(aa_1.is_assigned())
-        print(aa_1.get_atoms())
+        # aa_1.assign_atom(aa_1.get_atoms()[0])
+        # print(aa_1.one_letter_code)
+        # print(aa_1.three_letter_code)
+        # print(aa_1.is_assigned(aa_1.get_atoms()[0]))
+        # print(aa_1.is_assigned(aa_1.get_atoms()[1]))
+        # print(aa_1.is_assigned())
+        # print(aa_1.get_atoms())
         print(aa_1)
 
         aa_2 = AminoAcid('Glu')
