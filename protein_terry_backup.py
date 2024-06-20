@@ -142,7 +142,6 @@ class Peptide(Protein):
             raise IndexError( f"The parameter of index ({index}) is out of range {self.__range}!" )
         super().assign(index, atom)
 
-
 if __name__ == "__main__":
     tau = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
     core = tau[263:399] # sequence of the tau rigid core
@@ -185,7 +184,7 @@ if __name__ == "__main__":
         print(peptide_1.is_assigned())
         print(peptide_1[0])
 
-        print("=======================================")
-        print(AminoAcid.get_chemical_shifts())
-        print(AminoAcid.get_chemical_shifts('P'))
-        print(AminoAcid.get_chemical_shifts('Pro'))
+    print("=======================================")
+    print(AminoAcid.get_chemical_shifts())
+    print(AminoAcid.get_chemical_shifts('P'))
+    print(AminoAcid.get_chemical_shifts('Pro'))
