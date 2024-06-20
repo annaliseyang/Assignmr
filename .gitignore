@@ -2,3 +2,4 @@ __pycache__/
 peak_lists/
 *backup*
 *test*
+.DS_Store
