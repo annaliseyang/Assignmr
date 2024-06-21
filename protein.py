@@ -213,7 +213,7 @@ if __name__ == "__main__":
         print(peptide_1.is_assigned())
         print(peptide_1[0])
         print("Assignment: ", peptide_1.get_assignment(10, peptide_1[10].get_atoms()[1]))
-        print("Assignment: ", peptide_1.get_assignment(11, peptide_1[10].get_atoms()[1]))
+        print("Assignment: ", peptide_1.get_assignment(11, peptide_1[11].get_atoms()[1]))
 
         print("=======================================")
         print(AminoAcid.get_chemical_shifts())
