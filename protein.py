@@ -88,7 +88,8 @@ class AminoAcid:
 
     
     def get_assignment(self, atom: str):
-        return self.__atoms_assignments[atom]
+        assignment = self.__atoms_assignments[atom]
+        return assignment if assignment != False else None 
     
 
     def is_assigned(self, atom: str = None) -> bool:
@@ -116,7 +117,7 @@ class Protein:
         return self.__amino_acids[index]
 
 
-    def assign(self, index: int, atom: str , assignment) -> None:
+    def assign_atom(self, index: int, atom: str , assignment) -> None:
         self.__amino_acids[index].assign_atom(atom, assignment)
 
 
@@ -154,10 +155,10 @@ class Peptide(Protein):
         return all( [self[index].is_assigned(atom) for index in range(self.__range[0], self.__range[1])] )
 
 
-    def assign(self, index: int, atom: str , assignment) -> None:
+    def assign_atom(self, index: int, atom: str , assignment) -> None:
         if index < self.__range[0] or index >= self.__range[1]:
             raise IndexError( f"The parameter of index ({index}) is out of range {self.__range}!" )
-        super().assign(index, atom, assignment)
+        super().assign_atom(index, atom, assignment)
 
 
 if __name__ == "__main__":
@@ -195,7 +196,7 @@ if __name__ == "__main__":
         print("Assignment: ", aa_2.get_assignment(aa_2.get_atoms()[3]))
 
         protein_1 = Protein(tau)
-        protein_1.assign(10, protein_1[10].get_atoms()[1], assignment_2)
+        protein_1.assign_atom(10, protein_1[10].get_atoms()[1], assignment_2)
         # print(protein_1)
         print(protein_1.get_sequence())
         print(protein_1.is_assigned(1, protein_1[1].get_atoms()[1]))
@@ -204,7 +205,7 @@ if __name__ == "__main__":
         print(protein_1[0])
 
         peptide_1 = Peptide(tau, (10, 15))
-        peptide_1.assign(10, peptide_1[10].get_atoms()[1], assignment_2)
+        peptide_1.assign_atom(10, peptide_1[10].get_atoms()[1], assignment_2)
         print(peptide_1)
         print(peptide_1.get_sequence())
         print(peptide_1.is_assigned(1, peptide_1[1].get_atoms()[1]))
@@ -212,6 +213,7 @@ if __name__ == "__main__":
         print(peptide_1.is_assigned())
         print(peptide_1[0])
         print("Assignment: ", peptide_1.get_assignment(10, peptide_1[10].get_atoms()[1]))
+        print("Assignment: ", peptide_1.get_assignment(11, peptide_1[10].get_atoms()[1]))
 
         print("=======================================")
         print(AminoAcid.get_chemical_shifts())
