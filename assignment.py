@@ -1,6 +1,12 @@
 import numpy as np
 import pandas as pd
 from protein import *
+from dataclasses import dataclass
+
+@dataclass
+class Assignment:
+    chemical_shift: float
+    tentative: bool
 
 # initialize peaklists
 class PeakList:

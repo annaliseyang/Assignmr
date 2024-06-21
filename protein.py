@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class AminoAcid:
     __amino_acid_dict = {
         'A': 'Ala',
@@ -60,11 +61,11 @@ class AminoAcid:
             ]
 
         df_atoms = cs[condition]
-        self.__atoms_assignment_states = { atom: False for atom in df_atoms['atom_id'].to_list() }
+        self.__atoms_assignments = { atom: False for atom in df_atoms['atom_id'].to_list() }
 
 
     def __str__(self) -> str:
-        atoms_str = [ f"\033[1;33m{k}\033[0m" if v else f"{k}" for k, v in self.__atoms_assignment_states.items() ]
+        atoms_str = [ f"\033[1;33m{k}\033[0m" if v else f"{k}" for k, v in self.__atoms_assignments.items() ]
         return f"{self.__three_letter_code} ({self.one_letter_code}) {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {', '.join(atoms_str)}\n"
 
     @property
@@ -77,18 +78,23 @@ class AminoAcid:
 
 
     def get_atoms(self) -> list:
-        return list(self.__atoms_assignment_states.keys())
+        return list(self.__atoms_assignments.keys())
 
 
-    def assign_atom(self, atom) -> None:
-        match self.__atoms_assignment_states.get(atom):
-            case False: self.__atoms_assignment_states[atom] = True
-            case True: return
-            case _: raise ValueError(f"The atom of {atom} do NOT exist! ")
+    def assign_atom(self, atom: str, assignment) -> None:
+        if self.__atoms_assignments.get(atom) == None:
+            raise ValueError(f"The atom of {atom} do NOT exist! ")
+        self.__atoms_assignments[atom] = assignment
 
+    
+    def get_assignment(self, atom: str):
+        return self.__atoms_assignments[atom]
+    
 
-    def is_assigned(self, atom = None) -> bool:
-        return all(self.__atoms_assignment_states.values()) if atom is None else self.__atoms_assignment_states[atom]
+    def is_assigned(self, atom: str = None) -> bool:
+        if atom is None:
+            return all(assignment != False for assignment in self.__atoms_assignments.values()) 
+        return self.__atoms_assignments[atom] != False
 
 
 class Protein:
@@ -110,12 +116,16 @@ class Protein:
         return self.__amino_acids[index]
 
 
-    def is_assigned(self, index = None, atom = None) -> bool:
+    def assign(self, index: int, atom: str , assignment) -> None:
+        self.__amino_acids[index].assign_atom(atom, assignment)
+
+
+    def is_assigned(self, index: int = None, atom: str = None) -> bool:
         return all( [aa.is_assigned(atom) for aa in self.__amino_acids] ) if index is None else self.__amino_acids[index].is_assigned(atom)
 
 
-    def assign(self, index, atom) -> None:
-        self.__amino_acids[index].assign_atom(atom)
+    def get_assignment(self, index: int, atom: str):
+        return self[index].get_assignment(atom)
 
 
 class Peptide(Protein):
@@ -144,15 +154,22 @@ class Peptide(Protein):
         return all( [self[index].is_assigned(atom) for index in range(self.__range[0], self.__range[1])] )
 
 
-    def assign(self, index, atom) -> None:
+    def assign(self, index: int, atom: str , assignment) -> None:
         if index < self.__range[0] or index >= self.__range[1]:
             raise IndexError( f"The parameter of index ({index}) is out of range {self.__range}!" )
-        super().assign(index, atom)
+        super().assign(index, atom, assignment)
 
 
 if __name__ == "__main__":
     tau = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
     core = tau[263:399] # sequence of the tau rigid core
+
+    assignment_1 = (123.45, True)
+    assignment_2 = (789.00, False)
+
+    # print(assignment_1, assignment_2)
+    # print(assignment_1.chemical_shift, assignment_2.tentative)
+
 
     with open('chemical_shifts.csv', 'r') as f:
         cs = pd.read_csv(f)
@@ -167,15 +184,18 @@ if __name__ == "__main__":
         # print(aa_1.is_assigned())
         # print(aa_1.get_atoms())
         print(aa_1)
+        print("Assignment: ", aa_1.get_assignment(aa_1.get_atoms()[0]))
 
         aa_2 = AminoAcid('Glu')
-        aa_2.assign_atom(aa_2.get_atoms()[1])
-        aa_2.assign_atom(aa_2.get_atoms()[2])
-        aa_2.assign_atom(aa_2.get_atoms()[3])
+        aa_2.assign_atom(aa_2.get_atoms()[1], assignment_1)
+        aa_2.assign_atom(aa_2.get_atoms()[2], assignment_1)
+        aa_2.assign_atom(aa_2.get_atoms()[3], assignment_1)
         print(aa_2)
+        print("Assignment: ", aa_2.get_assignment(aa_2.get_atoms()[0]))
+        print("Assignment: ", aa_2.get_assignment(aa_2.get_atoms()[3]))
 
         protein_1 = Protein(tau)
-        protein_1.assign(10, protein_1[10].get_atoms()[1])
+        protein_1.assign(10, protein_1[10].get_atoms()[1], assignment_2)
         # print(protein_1)
         print(protein_1.get_sequence())
         print(protein_1.is_assigned(1, protein_1[1].get_atoms()[1]))
@@ -184,13 +204,14 @@ if __name__ == "__main__":
         print(protein_1[0])
 
         peptide_1 = Peptide(tau, (10, 15))
-        peptide_1.assign(10, peptide_1[10].get_atoms()[1])
+        peptide_1.assign(10, peptide_1[10].get_atoms()[1], assignment_2)
         print(peptide_1)
         print(peptide_1.get_sequence())
         print(peptide_1.is_assigned(1, peptide_1[1].get_atoms()[1]))
         print(peptide_1.is_assigned(1))
         print(peptide_1.is_assigned())
         print(peptide_1[0])
+        print("Assignment: ", peptide_1.get_assignment(10, peptide_1[10].get_atoms()[1]))
 
         print("=======================================")
         print(AminoAcid.get_chemical_shifts())
