@@ -37,3 +37,8 @@ if __name__ == "__main__":
     # NCACB.plot_peaks()
     # NCACB.plot_peaks(assigned_only=True)
     NCACB.plot_peaks_interactive()
+
+    # CONCA.plot_peaks_interactive()
+    CONCA.plot_peaks_interactive_3d()
+
+    # NCACX.plot_peaks_interactive_3d()

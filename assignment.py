@@ -4,6 +4,8 @@ from protein import *
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import plotly.express as px
+from plotly.offline import plot
+import plotly.graph_objects as go
 
 @dataclass
 class Assignment:
@@ -143,10 +145,60 @@ class PeakList:
         unassigned = self.get_unassigned_peaks()
 
         fig = px.scatter(assigned.peaklist, x='Position F1', y='Position F2', color='Volume', size_max=100, opacity=1, color_continuous_scale='magma', hover_data=self.get_assignment_column_names())
+        fig.update_traces(marker_size=10)
         if not assigned_only:
             fig.add_trace(px.scatter(unassigned.peaklist, x='Position F1', y='Position F2', color='Volume', size_max=10, opacity=0.3, color_continuous_scale='greys').data[0])
-        fig.show()
+            fig.update_traces(selector={'opacity': 0.3}, marker_size=5)
 
+        fig.update_xaxes(title_text=f'Position F1 ({self.dimensions[0]})')
+        fig.update_yaxes(title_text=f'Position F2 ({self.dimensions[1]})')
+
+        plot(fig, filename=f'plots/{self.name}.html')
+
+    def plot_peaks_interactive_3d(self, assigned_only = False):
+        assigned = self.get_assigned_peaks()
+        unassigned = self.get_unassigned_peaks()
+
+        fig = go.Figure(data=[go.Scatter3d(
+            x=assigned.peaklist['Position F1'],
+            y=assigned.peaklist['Position F2'],
+            z=assigned.peaklist['Position F3'],
+            mode='markers',
+            marker=dict(
+                size=5,
+                color=assigned.peaklist['Volume'],
+                colorscale='magma',
+                opacity=1
+            ),
+            text=self.get_assignment_column_names(),
+            name='Assigned'
+        )])
+
+        if not assigned_only:
+            fig.add_trace(go.Scatter3d(
+            x=unassigned.peaklist['Position F1'],
+            y=unassigned.peaklist['Position F2'],
+            z=unassigned.peaklist['Position F3'],
+            mode='markers',
+            marker=dict(
+                size=2.5,
+                color=unassigned.peaklist['Volume'],
+                colorscale='gray',
+                opacity=0.15
+            ),
+            text=self.get_assignment_column_names(),
+            name='Unassigned'
+            ))
+
+        fig.update_layout(
+            scene=dict(
+                xaxis_title=f'Position F1 ({self.dimensions[0]})',
+                yaxis_title=f'Position F2 ({self.dimensions[1]})',
+                zaxis_title=f'Position F3 ({self.dimensions[2]})'
+            )
+        )
+
+        plot(fig, filename=f'plots/{self.name}_3d.html')
 
 def assign(peaklist: PeakList, location: tuple, dimension: str, protein: Protein, residue_index, residue_name, atom):
     peaklist.update_assignment(location, dimension, protein, residue_index, residue_name, atom)
