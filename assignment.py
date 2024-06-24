@@ -152,6 +152,7 @@ class PeakList:
 
         fig.update_xaxes(title_text=f'Position F1 ({self.dimensions[0]})')
         fig.update_yaxes(title_text=f'Position F2 ({self.dimensions[1]})')
+        fig.update_layout(title=self.name)
 
         plot(fig, filename=f'plots/{self.name}.html')
 
@@ -159,7 +160,8 @@ class PeakList:
         assigned = self.get_assigned_peaks()
         unassigned = self.get_unassigned_peaks()
 
-        fig = go.Figure(data=[go.Scatter3d(
+        fig = go.Figure()
+        fig.add_trace(go.Scatter3d(
             x=assigned.peaklist['Position F1'],
             y=assigned.peaklist['Position F2'],
             z=assigned.peaklist['Position F3'],
@@ -172,7 +174,7 @@ class PeakList:
             ),
             text=self.get_assignment_column_names(),
             name='Assigned'
-        )])
+        ))
 
         if not assigned_only:
             fig.add_trace(go.Scatter3d(
@@ -191,6 +193,13 @@ class PeakList:
             ))
 
         fig.update_layout(
+            title={
+                'text': f'{self.name} 3D',
+                # 'y':0.95,
+                # 'x':0.5,
+                # 'xanchor': 'center',
+                # 'yanchor': 'top'
+                },
             scene=dict(
                 xaxis_title=f'Position F1 ({self.dimensions[0]})',
                 yaxis_title=f'Position F2 ({self.dimensions[1]})',
