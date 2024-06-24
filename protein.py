@@ -31,9 +31,11 @@ class AminoAcid:
         __chemical_shifts = pd.read_csv(f)
 
 
-    def get_chemical_shifts(amino_acid = None):
+    def get_chemical_shifts(amino_acid = None, atom = None):
         if amino_acid is None:
             return AminoAcid.__chemical_shifts
+        if atom:
+            return AminoAcid.__chemical_shifts[(AminoAcid.__chemical_shifts['comp_id'] == amino_acid) & (AminoAcid.__chemical_shifts['atom_id'] == atom)]
         match(len(amino_acid)):
             case 1:
                 amino_acid = AminoAcid.__amino_acid_dict[amino_acid]
@@ -41,6 +43,13 @@ class AminoAcid:
             case 3:
                 return AminoAcid.__chemical_shifts[AminoAcid.__chemical_shifts['comp_id'] == amino_acid]
         return ValueError( f"The parameter of amino_acid ({amino_acid}) is invalid!" )
+
+
+    def get_chemical_shift_range(amino_acid, atom, num_std = 2) -> tuple:
+        cs = AminoAcid.get_chemical_shifts(amino_acid, atom)
+        avg = float(cs['avg'])
+        half_range = float(cs['std']) * num_std
+        return (avg - half_range, avg + half_range)
 
 
     def __init__(self, id: str):
@@ -86,15 +95,15 @@ class AminoAcid:
             raise ValueError(f"The atom of {atom} do NOT exist! ")
         self.__atoms_assignments[atom] = assignment
 
-    
+
     def get_assignment(self, atom: str):
         assignment = self.__atoms_assignments[atom]
-        return assignment if assignment != False else None 
-    
+        return assignment if assignment != False else None
+
 
     def is_assigned(self, atom: str = None) -> bool:
         if atom is None:
-            return all(assignment != False for assignment in self.__atoms_assignments.values()) 
+            return all(assignment != False for assignment in self.__atoms_assignments.values())
         return self.__atoms_assignments[atom] != False
 
 
