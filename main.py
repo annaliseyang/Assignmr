@@ -19,6 +19,7 @@ if __name__ == "__main__":
 
     print(NCACB)
     print(NCACB.get_assigned_peaks())
+    print(NCACB.get_unassigned_peaks())
     assign(NCACB, (46.75326, 115.61445), '13C', core, 300, 'Ala', 'CA')
 
     print(core[300])
@@ -32,3 +33,7 @@ if __name__ == "__main__":
     peaks = CONCA.get_peaks_along_dimension((60.08067,127.90678), 2, tolerance=1, num_peaks=1, cs_range=target_range)
 
     print_filtered(peaks)
+
+    # NCACB.plot_peaks()
+    # NCACB.plot_peaks(assigned_only=True)
+    NCACB.plot_peaks_interactive()
