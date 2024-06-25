@@ -3,4 +3,4 @@ peak_lists/
 *backup*
 *test*
 .DS_Store
-plots/*html
+*html
