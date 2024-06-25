@@ -17,6 +17,7 @@ class PeakList:
     def __init__(self, name: str, dimensions: tuple, spectrum = None, peaklist: pd.DataFrame = None, filename = None) -> None:
         self.name = name
         self.dimensions = dimensions
+        self.num_dims = len(dimensions)
         self.spectrum = spectrum
 
         if peaklist is not None:
@@ -94,22 +95,38 @@ class PeakList:
             peaks['MAE'] = peaks.index.map(lambda row: np.mean([abs(peaks[f'Position F{i+1}'][row] - location[i]) for i in range(len(location)) if i != dim_index]))
             sorted_peaks = peaks.sort_values(by='MAE')
             print(f'Returning {num_peaks} out of {len(peaks)} peaks with lowest MAE:')
+            print(sorted_peaks[:num_peaks])
             return sorted_peaks[:num_peaks]
 
         # otherwise, return all peaks
         return peaks
 
 
-    def update_assignment(self, location: tuple, dimension: str, protein, residue_index, residue_name, atom):
+    def update_assignment(self, location: tuple, dimension: int, protein, residue_index, residue_name, atom):
         """
         Update the assignment of a peak at a given location.
         """
-        dim_index = self.dimensions.index(dimension)
+        # dim_index = self.dimensions.index(dimension)
         assignment_str = str(residue_index) + residue_name + atom
 
         peak = self.get_peak(location)
-        self.peaklist[f'Assign F{dim_index+1}'][peak.index] = assignment_str
+        self.peaklist[f'Assign F{dimension+1}'][peak.index] = assignment_str
         print('Peak:\n', peak)
+
+        self.save_to_csv(f'peaklists/{self.name}_autoassign.csv')
+
+    def assign_peak(self, peak, dimension: int, protein, residue_index, residue_name, atom):
+        """
+        Assign an atom to the given peak.
+        """
+        assignment_str = str(residue_index) + residue_name + atom
+        self.peaklist[f'Assign F{dimension+1}'][peak.index] = assignment_str
+
+        # print the updated peak
+        new_peak = self.peaklist.loc[peak.index]
+
+        print(f'New assignment made to {self.name} peak:')
+        print_filtered(new_peak)
 
         self.save_to_csv(f'peaklists/{self.name}_autoassign.csv')
 
@@ -193,13 +210,7 @@ class PeakList:
             ))
 
         fig.update_layout(
-            title={
-                'text': f'{self.name} 3D',
-                # 'y':0.95,
-                # 'x':0.5,
-                # 'xanchor': 'center',
-                # 'yanchor': 'top'
-                },
+            title={'text': f'{self.name} 3D'},
             scene=dict(
                 xaxis_title=f'Position F1 ({self.dimensions[0]})',
                 yaxis_title=f'Position F2 ({self.dimensions[1]})',
@@ -209,11 +220,63 @@ class PeakList:
 
         plot(fig, filename=f'plots/{self.name}_3d.html')
 
-def assign(peaklist: PeakList, location: tuple, dimension: str, protein: Protein, residue_index, residue_name, atom):
+
+def assign(peaklist: PeakList, location: tuple, dimension: int, protein: Protein, residue_index, residue_name, atom):
     peaklist.update_assignment(location, dimension, protein, residue_index, residue_name, atom)
-    assignment = Assignment(location, True)
+    assignment = Assignment(location[dimension], tentative=True)
     protein.assign_atom(residue_index, atom, assignment)
 
+    print(f"\nAssigning to atom: {residue_index} {residue_name}, {atom}...\t", protein[residue_index].get_assignment(atom))
+
+
+def extend_assignment_left(protein: Protein, residue_index):
+    """
+    Extend the assignment of a protein to the left by one residue.
+    """
+    current_residue = protein[residue_index]
+    print(f"Extending assignment to the left of {residue_index} {current_residue.three_letter_code}...")
+    print('Current residue:', current_residue)
+
+    N = current_residue.get_assignment('N').chemical_shift
+    CA = current_residue.get_assignment('CA').chemical_shift
+
+    print('N:', N, 'CA:', CA)
+
+    if N is None or CA is None:
+        raise ValueError('Unable to extend assignment. Missing assignments for N or CA!')
+
+    # get the previous residue
+    prev_residue = protein[residue_index - 1]
+    print('Previous residue:', prev_residue)
+
+    # find peaks in CONCA peaklist given N and CA chemical shifts of the current residue
+    CONCA = PeakList('CONCA', ('13C', '15N', '13C'), filename='peaklists/CONCA_autoassign.csv')
+
+    target_range = AminoAcid.get_chemical_shift_range(prev_residue.three_letter_code, 'C')
+    print('Target range:', target_range)
+    peak = CONCA.get_peaks_along_dimension((CA, N), 2, tolerance=1, num_peaks=1, cs_range=target_range)
+
+    prev_C = peak['Position F3']
+    print(f'Generated assignment for previous residue:', prev_C.values[0])
+    assignment = Assignment(prev_C.values[0], tentative=True)
+    print(get_location(peak, CONCA.num_dims))
+    # assign(CONCA, get_location(peak, CONCA.num_dims), 2, protein, residue_index - 1, prev_residue.three_letter_code, 'C')
+    CONCA.assign_peak(peak, 2, protein, residue_index - 1, prev_residue.three_letter_code, 'C')
+
+    print(f"\nAssignment extended to {residue_index - 1} {prev_residue.three_letter_code}.")
+    print(protein[residue_index - 1])
+
+
+
+def get_location(peak, num_dims, dimension: int = None):
+    """
+    Get the location (ppm) of a peak along a dimension if the dimension is specified.
+    Otherwise, return a tuple of the coordinates.
+    """
+    if dimension is None:
+        return tuple(peak[f'Position F{i+1}'].values[0] for i in range(num_dims))
+    else:
+        return peak[f'Position F{dimension+1}']
 
 def print_filtered(df):
     """
@@ -223,6 +286,7 @@ def print_filtered(df):
         col for col in df.columns if 'Assign' in col or 'Position' in col
     ]
     print(df[columns].head())
+    return df[columns]
 
 
 if __name__ == "__main__":

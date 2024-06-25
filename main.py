@@ -17,28 +17,17 @@ if __name__ == "__main__":
     CONCA = PeakList('CONCA', ('13C', '15N', '13C'))
 
 
-    print(NCACB)
-    print(NCACB.get_assigned_peaks())
-    print(NCACB.get_unassigned_peaks())
-    assign(NCACB, (46.75326, 115.61445), '13C', core, 300, 'Ala', 'CA')
+    # print(NCACB)
+    # print(NCACB.get_assigned_peaks())
+    # print(NCACB.get_unassigned_peaks())
 
-    print(core[300])
+    assign(NCACB, (60.08067,127.90678), 0, core, 319, 'Thr', 'CA')
+    assign(NCACB, (60.08067,127.90678), 1, core, 319, 'Thr', 'N')
+    assign(NCACB, (67.47906,127.83724), 0, core, 319, 'Thr', 'CB')
+    assign(NCACB, (67.47906,127.83724), 1, core, 319, 'Thr', 'N')
 
-    # find peaks in CONCA peaklist given N and CA chemical shifts
-    # peaks = CONCA.get_peaks_along_dimension((46.75326, 115.61445), 2, tolerance=10)
-    Val_C_chemical_shifts = AminoAcid.get_chemical_shifts('Val', 'C')
-    print(Val_C_chemical_shifts)
-    target_range = AminoAcid.get_chemical_shift_range('Val', 'C')
-    print('target range:', target_range)
-    peaks = CONCA.get_peaks_along_dimension((60.08067,127.90678), 2, tolerance=1, num_peaks=1, cs_range=target_range)
+    assign(CONCA, (59.08024,126.09000,172.96581), 2, core, 318, 'Val', 'C')
+    # assign(NCACB, (46.75326, 115.61445), 0, core, 300, 'Ala', 'CA')
 
-    print_filtered(peaks)
-
-    # NCACB.plot_peaks()
-    # NCACB.plot_peaks(assigned_only=True)
-    NCACB.plot_peaks_interactive()
-
-    # CONCA.plot_peaks_interactive()
-    CONCA.plot_peaks_interactive_3d()
-
-    # NCACX.plot_peaks_interactive_3d()
+    print(core[319])
+    extend_assignment_left(core, 319)

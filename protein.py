@@ -47,8 +47,8 @@ class AminoAcid:
 
     def get_chemical_shift_range(amino_acid, atom, num_std = 2) -> tuple:
         cs = AminoAcid.get_chemical_shifts(amino_acid, atom)
-        avg = float(cs['avg'])
-        half_range = float(cs['std']) * num_std
+        avg = float(cs['avg'].iloc[0])
+        half_range = float(cs['std'].iloc[0]) * num_std
         return (avg - half_range, avg + half_range)
 
 
