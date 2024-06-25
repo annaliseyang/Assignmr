@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from plotly.offline import plot
 import plotly.graph_objects as go
+import os
 
 @dataclass
 class Assignment:
@@ -171,6 +172,7 @@ class PeakList:
         fig.update_yaxes(title_text=f'Position F2 ({self.dimensions[1]})')
         fig.update_layout(title=self.name)
 
+        os.makedirs('plots', exist_ok=True)
         plot(fig, filename=f'plots/{self.name}.html')
 
     def plot_peaks_interactive_3d(self, assigned_only = False):
@@ -218,6 +220,7 @@ class PeakList:
             )
         )
 
+        os.makedirs('plots', exist_ok=True)
         plot(fig, filename=f'plots/{self.name}_3d.html')
 
 

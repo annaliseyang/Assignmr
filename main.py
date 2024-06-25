@@ -31,3 +31,6 @@ if __name__ == "__main__":
 
     print(core[319])
     extend_assignment_left(core, 319)
+
+    NCACB.plot_peaks_interactive()
+    # CONCA.plot_peaks_interactive_3d()
