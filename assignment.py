@@ -71,36 +71,45 @@ class PeakList:
             unassigned_peaks = self.peaklist[~self.peaklist[assignment_columns].notna().any(axis=1)]
         return PeakList(self.name + '_unassigned', self.dimensions, self.spectrum, unassigned_peaks)
 
-    def get_peaks_along_dimension(self, location: tuple, dim_index: int, tolerance = 0.1, num_peaks = None, cs_range: tuple = None):
+    def get_peaks_along_dimension(self, location: tuple, dim_index: int, tolerance = 1, num_peaks = None, cs_range: tuple = None):
         """
         Get all peaks along a dimension with the given location and tolerance.
         The resulting peaklist matches the given location in all dimensions except the one specified by dim_index.
         """
         # filter the peaklist by the given location and tolerance
-        condition = []
-        for row in range(len(self.peaklist)):
-            if all([abs(self.peaklist[f'Position F{i+1}'][row] - location[i]) < tolerance for i in range(len(location)) if i != dim_index]):
-                condition.append(True)
-            else:
-                condition.append(False)
+        if tolerance:
+            condition = []
+            for row in range(len(self.peaklist)):
+                if all([abs(self.peaklist[f'Position F{i+1}'][row] - location[i]) < tolerance for i in range(len(location)) if i != dim_index]):
+                    condition.append(True)
+                else:
+                    condition.append(False)
 
-        peaks = self.peaklist[condition]
+            peaks = self.peaklist[condition]
+        else:
+            peaks = self.peaklist
 
         # filter by range if specified
         if cs_range:
             min_val, max_val = cs_range
             peaks = peaks[(peaks[f'Position F{dim_index+1}'] >= min_val) & (peaks[f'Position F{dim_index+1}'] <= max_val)]
 
+        if peaks.empty:
+            print('No peaks found.')
+            return
+
+        # sort the peaks by lowest MAE
+        peaks['MAE'] = peaks.index.map(lambda row: np.mean([abs(peaks[f'Position F{i+1}'][row] - location[i]) for i in range(len(location)) if i != dim_index]))
+        sorted_peaks = peaks.sort_values(by='MAE')
+
         # if num_peaks is specified, return the top num_peaks peaks by lowest MAE
         if num_peaks and num_peaks < len(peaks):
-            peaks['MAE'] = peaks.index.map(lambda row: np.mean([abs(peaks[f'Position F{i+1}'][row] - location[i]) for i in range(len(location)) if i != dim_index]))
-            sorted_peaks = peaks.sort_values(by='MAE')
             print(f'Returning {num_peaks} out of {len(peaks)} peaks with lowest MAE:')
             print(sorted_peaks[:num_peaks])
             return sorted_peaks[:num_peaks]
 
-        # otherwise, return all peaks
-        return peaks
+        # otherwise, return sorted peaks
+        return sorted_peaks
 
 
     def update_assignment(self, location: tuple, dimension: int, protein, residue_index, residue_name, atom):
@@ -191,8 +200,9 @@ class PeakList:
                 colorscale='magma',
                 opacity=1
             ),
-            text=self.get_assignment_column_names(),
-            name='Assigned'
+            text=assigned.peaklist[self.get_assignment_column_names()].apply(lambda row: ', '.join(row.values.astype(str)), axis=1),
+            name='Assigned',
+            hoverinfo='x+y+z+text'
         ))
 
         if not assigned_only:
@@ -225,6 +235,7 @@ class PeakList:
 
 
 def assign(peaklist: PeakList, location: tuple, dimension: int, protein: Protein, residue_index, residue_name, atom):
+    assert protein[residue_index].three_letter_code == residue_name, f"Residue {residue_index} is not {residue_name}!"
     peaklist.update_assignment(location, dimension, protein, residue_index, residue_name, atom)
     assignment = Assignment(location[dimension], tentative=True)
     protein.assign_atom(residue_index, atom, assignment)
@@ -236,6 +247,7 @@ def extend_assignment_left(protein: Protein, residue_index):
     """
     Extend the assignment of a protein to the left by one residue.
     """
+    # residue_index = residue_index -1
     current_residue = protein[residue_index]
     print(f"Extending assignment to the left of {residue_index} {current_residue.three_letter_code}...")
     print('Current residue:', current_residue)
@@ -265,9 +277,61 @@ def extend_assignment_left(protein: Protein, residue_index):
     print(get_location(peak, CONCA.num_dims))
     # assign(CONCA, get_location(peak, CONCA.num_dims), 2, protein, residue_index - 1, prev_residue.three_letter_code, 'C')
     CONCA.assign_peak(peak, 2, protein, residue_index - 1, prev_residue.three_letter_code, 'C')
+    prev_residue.assign_atom('C', assignment)
 
     print(f"\nAssignment extended to {residue_index - 1} {prev_residue.three_letter_code}.")
     print(protein[residue_index - 1])
+
+    # CONCA.plot_peaks_interactive_3d()
+
+
+def extend_assignment_right(protein: Protein, residue_index):
+    pass
+
+
+def complete_assignment(protein: Protein, residue_index):
+    """
+    Complete the assignment of an amino acid.
+    The C atom and N(i+1) should already be assigned before calling this function.
+    """
+    C = protein[residue_index].get_assignment('C').chemical_shift
+    next_N = protein[residue_index + 1].get_assignment('N').chemical_shift
+
+    print(f"Completing assignment for {residue_index} {protein[residue_index].three_letter_code}...")
+    print('C:', C, 'N(i+1):', next_N)
+
+    if C is None or next_N is None:
+        raise ValueError('Unable to complete assignment. Missing assignments for C or N(i+1)!')
+
+    NCOCX = PeakList('NCOCX', ('13C', '13C', '15N'), filename='peaklists/NCOCX_autoassign.csv')
+
+    target_ranges = AminoAcid.get_cx_chemical_shift_ranges(protein[residue_index].three_letter_code)
+    print('Target ranges:', target_ranges)
+
+    peaks = NCOCX.get_peaks_along_dimension((C, C, next_N), 0, tolerance=3, num_peaks=None, cs_range=None)
+    print_filtered(peaks)
+
+    for atom, range in target_ranges.items():
+        min, max = range
+        # pick the peak with the highest intensity within the specified range
+        peak = peaks.loc[(peaks["Position F1"] >= range[0]) & (peaks["Position F1"] <= range[1])]
+        if peak.empty:
+            print(f"No {atom} peak found within range {range}!")
+            continue
+        print_filtered(peak)
+        # peak = peak.sort_values(atom, ascending=False).iloc[0]
+        peak = peak.sort_values('Volume', ascending=False).iloc[0]
+        print(f"Selected peak for {atom}:")
+        print_filtered(peak)
+        location = get_location(peak, NCOCX.num_dims, 0)
+        assignment = Assignment(location, tentative=True)
+        protein[residue_index].assign_atom(atom, assignment)
+        print(f"Assigned {atom} to {location}...")
+
+    print(f"\nAssignment completed for {residue_index} {protein[residue_index].three_letter_code}.")
+    print(protein[residue_index])
+
+
 
 
 
@@ -281,15 +345,20 @@ def get_location(peak, num_dims, dimension: int = None):
     else:
         return peak[f'Position F{dimension+1}']
 
+
 def print_filtered(df):
     """
     Print only the 'Assign' and 'Position' columns of a dataframe.
     """
-    columns = [
-        col for col in df.columns if 'Assign' in col or 'Position' in col
-    ]
-    print(df[columns].head())
-    return df[columns]
+    try:
+        columns = [
+            col for col in df.columns if 'Assign' in col or 'Position' in col
+        ]
+        print(df[columns])
+        return df[columns]
+    except AttributeError:
+        print(df)
+        return df
 
 
 if __name__ == "__main__":

@@ -51,6 +51,21 @@ class AminoAcid:
         half_range = float(cs['std'].iloc[0]) * num_std
         return (avg - half_range, avg + half_range)
 
+    def get_cx_chemical_shift_ranges(amino_acid, num_std = 2) -> dict:
+        '''
+        Return a dictionary of the chemical shift ranges of all the Cx atoms of the amino acid, excluding C.
+        '''
+        ranges = {
+            atom: AminoAcid.get_chemical_shift_range(amino_acid, atom, num_std)
+            for atom in AminoAcid.get_chemical_shifts(amino_acid)['atom_id']
+            if atom.startswith('C') and atom != 'C'
+        }
+        # for atom, shift in AminoAcid.get_chemical_shifts(amino_acid).iterrows():
+        #     if atom.startswith('C') and atom != 'C':
+        #         print(atom, shift)
+        # ca_range = AminoAcid.get_chemical_shift_range(amino_acid, 'CA', num_std)
+        # cb_range = AminoAcid.get_chemical_shift_range(amino_acid, 'CB', num_std)
+        return ranges
 
     def __init__(self, id: str):
         id_2 = self.__amino_acid_dict[id]
@@ -123,11 +138,11 @@ class Protein:
 
 
     def __getitem__(self, index):
-        return self.__amino_acids[index]
+        return self.__amino_acids[index-1] # input index starts from 1
 
 
     def assign_atom(self, index: int, atom: str , assignment) -> None:
-        self.__amino_acids[index].assign_atom(atom, assignment)
+        self[index].assign_atom(atom, assignment)
 
 
     def is_assigned(self, index: int = None, atom: str = None) -> bool:
