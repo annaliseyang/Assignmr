@@ -37,7 +37,7 @@ if __name__ == "__main__":
         index -= 1
         break # break for testing
 
-    # print(core[318])
+    print(core[318])
     # print(core)
 
     # assign(NCACB, (58.82997,126.11562), 0, core, 318, 'Val', 'CA')

@@ -249,6 +249,7 @@ def extend_assignment_left(protein: Protein, residue_index):
     """
     # residue_index = residue_index -1
     current_residue = protein[residue_index]
+    print("--------------------------------------------------")
     print(f"Extending assignment to the left of {residue_index} {current_residue.three_letter_code}...")
     print('Current residue:', current_residue)
 
@@ -294,6 +295,8 @@ def complete_assignment(protein: Protein, residue_index):
     Complete the assignment of an amino acid.
     The C atom and N(i+1) should already be assigned before calling this function.
     """
+    print("--------------------------------------------------")
+
     C = protein[residue_index].get_assignment('C').chemical_shift
     next_N = protein[residue_index + 1].get_assignment('N').chemical_shift
 
