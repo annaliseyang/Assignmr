@@ -92,6 +92,14 @@ class AminoAcid:
         atoms_str = [ f"\033[1;33m{k}\033[0m" if v else f"{k}" for k, v in self.__atoms_assignments.items() ]
         return f"{self.__three_letter_code} ({self.one_letter_code}) {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {', '.join(atoms_str)}\n"
 
+    def __str__(self) -> str:
+        def format_string(string: str) -> str:
+            return f"\033[1;33m{string}\033[0m"
+
+        atoms_str = [ format_string(f"{k}") if v else f"{k}" for k, v in self.__atoms_assignments.items() ]
+        assignments_str = '\n'.join([ format_string(f"{k}: {v}") if v else f"{k}: {v}" for k, v in self.__atoms_assignments.items() ])
+        return f"\n{self.__three_letter_code} ({self.one_letter_code}) {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {', '.join(atoms_str)}\n{assignments_str}"
+
     @property
     def one_letter_code(self) -> str:
         return self.__one_letter_code
