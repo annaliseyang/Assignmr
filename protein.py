@@ -48,7 +48,8 @@ class AminoAcid:
     def get_chemical_shift_range(amino_acid, atom, num_std = 2) -> tuple:
         cs = AminoAcid.get_chemical_shifts(amino_acid, atom)
         avg = float(cs['avg'].iloc[0])
-        half_range = float(cs['std'].iloc[0]) * num_std
+        std = float(cs['std'].iloc[0])
+        half_range = std * num_std
         return (avg - half_range, avg + half_range)
 
     def get_cx_chemical_shift_ranges(amino_acid, num_std = 2) -> dict:
@@ -122,6 +123,9 @@ class AminoAcid:
     def get_assignment(self, atom: str):
         assignment = self.__atoms_assignments[atom]
         return assignment if assignment != False else None
+
+    def get_assignments(self) -> dict:
+        return self.__atoms_assignments
 
 
     def is_assigned(self, atom: str = None) -> bool:

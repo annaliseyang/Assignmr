@@ -7,6 +7,7 @@ import plotly.express as px
 from plotly.offline import plot
 import plotly.graph_objects as go
 import os
+from variables import *
 
 @dataclass
 class Assignment:
@@ -28,7 +29,8 @@ class PeakList:
                 self.peaklist = pd.read_csv(f)
         else:
             try:
-                with open(f'peaklists/{name}.csv', 'r') as f:
+                with open(f'peaklists/{name}_empty.csv', 'r') as f:
+                    print(f'peaklists/{name}_empty.csv loaded')
                     self.peaklist = pd.read_csv(f)
             except FileNotFoundError:
                 raise FileNotFoundError(f'Peaklist {name} not found')
@@ -54,19 +56,23 @@ class PeakList:
     def get_peak(self, location: tuple):
         return self.peaklist[(self.peaklist['Position F1'] == location[0]) & (self.peaklist['Position F2'] == location[1])]
 
-    def get_assigned_peaks(self, fully = False):
+    def get_assigned_peaks(self, fully = False, dim_index: int = None):
         # check if any or all columns starting with Assign is not None
         assignment_columns = self.get_assignment_column_names()
         if fully:
             assigned_peaks = self.peaklist[self.peaklist[assignment_columns].notna().all(axis=1)]
+        elif dim_index is not None:
+            assigned_peaks = self.peaklist[self.peaklist[assignment_columns[dim_index]].notna()]
         else:
             assigned_peaks = self.peaklist[self.peaklist[assignment_columns].notna().any(axis=1)]
         return PeakList(self.name + '_assigned', self.dimensions, self.spectrum, assigned_peaks)
 
-    def get_unassigned_peaks(self, fully = False):
+    def get_unassigned_peaks(self, fully = False, dim_index: int = None):
         assignment_columns = self.get_assignment_column_names()
         if fully:
             unassigned_peaks = self.peaklist[~self.peaklist[assignment_columns].isna().all(axis=1)]
+        elif dim_index is not None:
+            unassigned_peaks = self.peaklist[~self.peaklist[assignment_columns[dim_index]].isna()]
         else:
             unassigned_peaks = self.peaklist[~self.peaklist[assignment_columns].notna().any(axis=1)]
         return PeakList(self.name + '_unassigned', self.dimensions, self.spectrum, unassigned_peaks)
@@ -76,18 +82,19 @@ class PeakList:
         Get all peaks along a dimension with the given location and tolerance.
         The resulting peaklist matches the given location in all dimensions except the one specified by dim_index.
         """
+        peaklist = self.peaklist
         # filter the peaklist by the given location and tolerance
         if tolerance:
-            condition = []
-            for row in range(len(self.peaklist)):
-                if all([abs(self.peaklist[f'Position F{i+1}'][row] - location[i]) < tolerance for i in range(len(location)) if i != dim_index]):
+            condition = [] # a list of booleans indicating whether a row satisfies the condition
+            for row in range(len(peaklist)):
+                if all([abs(peaklist[f'Position F{i+1}'][row] - location[i]) < tolerance for i in range(len(location)) if i != dim_index]):
                     condition.append(True)
                 else:
                     condition.append(False)
 
-            peaks = self.peaklist[condition]
+            peaks = peaklist[condition]
         else:
-            peaks = self.peaklist
+            peaks = peaklist
 
         # filter by range if specified
         if cs_range:
@@ -120,16 +127,32 @@ class PeakList:
         assignment_str = str(residue_index) + residue_name + atom
 
         peak = self.get_peak(location)
+        print("*********************")
+        print(f'peaklists/{self.name}_autoassign_new.csv')
+
+        print(type(self.peaklist[f'Assign F{dimension+1}'][peak.index]))
+        print(self.peaklist[f'Assign F{dimension+1}'][peak.index])
+
         self.peaklist[f'Assign F{dimension+1}'][peak.index] = assignment_str
         print('Peak:\n', peak)
 
-        self.save_to_csv(f'peaklists/{self.name}_autoassign.csv')
+        # self.save_to_csv(f'peaklists/{self.name}_autoassign.csv')
+
+        self.save_to_csv(f'peaklists/{self.name}_autoassign_new.csv')
 
     def assign_peak(self, peak, dimension: int, protein, residue_index, residue_name, atom):
         """
         Assign an atom to the given peak.
         """
         assignment_str = str(residue_index) + residue_name + atom
+        previous_assignment = self.peaklist.at[peak.index[0], f'Assign F{dimension+1}'] # find the previous assignment
+        # print("Previous assignment:", previous_assignment)
+
+        # if previous_assignment:
+        #     print(previous_assignment)
+        #     # print(f'Warning: Overwriting previous assignment {previous_assignment} for peak at {location} in dimension {dimension+1}')
+        #     raise ValueError(f'Cannot overwrite previous assignment {previous_assignment}. Exiting...')
+
         self.peaklist[f'Assign F{dimension+1}'][peak.index] = assignment_str
 
         # print the updated peak
@@ -246,6 +269,8 @@ def assign(peaklist: PeakList, location: tuple, dimension: int, protein: Protein
 def extend_assignment_left(protein: Protein, residue_index):
     """
     Extend the assignment of a protein to the left by one residue.
+    Maps the given N and CA chemical shifts to the CONCA peaklist, then finds the closest aligned peak in CONCA.
+    Then the C dimension of the chosen peak is assigned to the i-1 residue.
     """
     # residue_index = residue_index -1
     current_residue = protein[residue_index]
@@ -270,7 +295,12 @@ def extend_assignment_left(protein: Protein, residue_index):
 
     target_range = AminoAcid.get_chemical_shift_range(prev_residue.three_letter_code, 'C')
     print('Target range:', target_range)
-    peak = CONCA.get_peaks_along_dimension((CA, N), 2, tolerance=1, num_peaks=1, cs_range=target_range)
+
+    # find the closest peak in CONCA peaklist
+    peak = CONCA.get_peaks_along_dimension((CA, N), 2, tolerance=TOLERANCE, num_peaks=1, cs_range=target_range)
+    if peak is None:
+        print('No peaks found in CONCA peaklist matching the target range. Exiting...')
+        return
 
     prev_C = peak['Position F3']
     print(f'Generated assignment for previous residue:', prev_C.values[0])
@@ -290,10 +320,69 @@ def extend_assignment_right(protein: Protein, residue_index):
     pass
 
 
+def find_N(protein: Protein, residue_index):
+    """
+    Complete the assignment of an amino acid by assigning its N chemical shift.
+    Looks in NCACX for the N value that match all the assigned Cx values.
+    """
+    print("--------------------------------------------------")
+    print(f"Finding N chemical shift for {residue_index} {protein[residue_index].three_letter_code}...")
+
+    C = protein[residue_index].get_assignment('C').chemical_shift
+    print('C:', C)
+    CA = protein[residue_index].get_assignment('CA').chemical_shift
+    print('CA:', CA)
+
+    if C is None or CA is None:
+        raise ValueError('Unable to find N chemical shift. Missing assignment for C or CA!')
+    NCACX = PeakList('NCACX', ('13C', '13C', '15N'), filename='peaklists/NCACX_autoassign.csv')
+
+    # try N values that match all the assigned Cx values
+    min_n, max_n = 105, 135 # assuming N values fall between 105 and 135
+    step_size = 0.1
+
+    def match_cx_values(N, peaks, Cx_assignments):
+        Cx_guesses = peaks["Position F1"].to_list()
+        # loop over current assignments and check if Cx values match the peaks found in the N dimension
+        for atom, assignment in Cx_assignments.items():
+            if not assignment:
+                continue # skip over atom if assignment is None
+            # check if Cx value matches any of the peak found in the N dimension
+            Cx_real = assignment.chemical_shift
+            # peaks = peaks[peaks["Position F1"] in range(N - TOLERANCE, N + TOLERANCE)]
+            if all([abs(Cx_real - Cx_guess) > TOLERANCE for Cx_guess in Cx_guesses]):
+                print(f"Cx chemical shift {Cx_real} not found in this N dimension.")
+                return False # Cx values do not match for this N value
+            # print(f"N chemical shift found: {N}")
+            # protein[residue_index].assign_atom('N', Assignment(N, tentative=True))
+        print(f"N chemical shift found: {N}")
+        return True # Cx values match for this N value
+
+    possible_N_values = [] # list to store possible N values
+    N = min_n # initial guess
+
+    while N <= max_n:
+        print('Trying N:', N)
+        peaks = NCACX.get_peaks_along_dimension((C, CA, N), 0, tolerance=TOLERANCE, num_peaks=None, cs_range=None)
+        if peaks is not None:
+            print('Found possible N chemical shift:', N, "\nChecking Cx values...')")
+            if match_cx_values(N, peaks, protein[residue_index].get_assignments()):
+                print(peaks)
+                # protein[residue_index].assign_atom('N', Assignment(N, tentative=True))
+                possible_N_values.append(N)
+        N += step_size
+    print(possible_N_values)
+    print(protein[residue_index])
+    if not possible_N_values:
+        raise ValueError(f'Unable to find N chemical shift! Please check the assignments for this residue.')
+    return possible_N_values
+
+
 def complete_assignment(protein: Protein, residue_index):
     """
     Complete the assignment of an amino acid.
     The C atom and N(i+1) should already be assigned before calling this function.
+    The generated assignments should include the Cx and N values.
     """
     print("--------------------------------------------------")
 
@@ -311,7 +400,7 @@ def complete_assignment(protein: Protein, residue_index):
     target_ranges = AminoAcid.get_cx_chemical_shift_ranges(protein[residue_index].three_letter_code)
     print('Target ranges:', target_ranges)
 
-    peaks = NCOCX.get_peaks_along_dimension((C, C, next_N), 0, tolerance=3, num_peaks=None, cs_range=None)
+    peaks = NCOCX.get_peaks_along_dimension((C, C, next_N), 0, tolerance=TOLERANCE, num_peaks=None, cs_range=None)
     print_filtered(peaks)
 
     for atom, range in target_ranges.items():
@@ -331,8 +420,24 @@ def complete_assignment(protein: Protein, residue_index):
         protein[residue_index].assign_atom(atom, assignment)
         print(f"Assigned {atom} to {location}...")
 
-    print(f"\nAssignment completed for {residue_index} {protein[residue_index].three_letter_code}.")
-    print(protein[residue_index])
+    print("All Cx atoms assigned successfully!")
+    print("Finding N in NCACX...")
+    # NCACX = PeakList('NCACX', ('13C', '15N', '13C'), filename='peaklists/NCACX_autoassign.csv')
+    # target_range = AminoAcid.get_chemical_shift_range(protein[residue_index].three_letter_code, 'N')
+    # peaks = NCACX.get_peaks_along_dimension((C, C, next_N), 0, tolerance=1, num_peaks=None, cs_range=target_range)
+
+    possible_N_values = find_N(protein, residue_index)
+    for N in possible_N_values:
+        try:
+            protein[residue_index].assign_atom('N', Assignment(N, tentative=True))
+            extend_assignment_left(protein, residue_index)
+            complete_assignment(protein, residue_index - 1)
+        except ValueError as e:
+            print(f"Error assigning N chemical shift: {e}")
+            continue
+
+    # print(f"\nAssignment completed for {residue_index} {protein[residue_index].three_letter_code}.")
+    # print(protein[residue_index])
 
 
 

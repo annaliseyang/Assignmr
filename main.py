@@ -26,16 +26,27 @@ if __name__ == "__main__":
     assign(NCACB, (67.47906,127.83724), 0, core, 319, 'Thr', 'CB')
     assign(NCACB, (67.47906,127.83724), 1, core, 319, 'Thr', 'N')
 
+    core[305].assign_atom('C', Assignment(172.812, True))
+    core[305].assign_atom('N', Assignment(112.32, True))
+    core[305].assign_atom('CA', Assignment(52.329, True))
+    core[305].assign_atom('CB', Assignment(63.353, True))
+
+    start_index = 319
+
+    print(core[start_index])
+    extend_assignment_left(core, start_index)
+    complete_assignment(core, start_index - 1)
+
     # assign(CONCA, (59.08024,126.09000,172.96581), 2, core, 318, 'Val', 'C')
     # assign(NCACB, (46.75326, 115.61445), 0, core, 300, 'Ala', 'CA')
 
     # print(core[319])
-    index = 319
-    while index > 310:
-        extend_assignment_left(core, index)
-        complete_assignment(core, index - 1)
-        index -= 1
-        break # break for testing
+    # index = 319
+    # while index > 310:
+    #     extend_assignment_left(core, index)
+    #     complete_assignment(core, index - 1)
+    #     index -= 1
+    #     break # break for testing
 
     print(core[318])
     # print(core)
