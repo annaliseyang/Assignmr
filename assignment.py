@@ -374,7 +374,7 @@ def find_N(protein: Protein, residue_index):
     print(possible_N_values)
     print(protein[residue_index])
     if not possible_N_values:
-        raise ValueError(f'Unable to find N chemical shift! Please check the assignments for this residue.')
+        raise ValueError(f'Unable to find N chemical shift! Please check the assignments for this residue: {residue_index}{protein[residue_index].three_letter_code}{protein[residue_index]}')
     return possible_N_values
 
 

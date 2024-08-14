@@ -134,6 +134,7 @@ class AminoAcid:
         return self.__atoms_assignments[atom] != False
 
 
+
 class Protein:
     def __init__(self, sequence: str) -> None:
         self.__sequence = sequence
@@ -163,6 +164,10 @@ class Protein:
 
     def get_assignment(self, index: int, atom: str):
         return self[index].get_assignment(atom)
+
+    def get_indices_of_amino_acid(self, amino_acid: str) -> list:
+        indices = [i+1 for i, aa in enumerate(self.__amino_acids) if aa.three_letter_code == amino_acid or aa.one_letter_code == amino_acid]
+        return indices
 
 
 class Peptide(Protein):

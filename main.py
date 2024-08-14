@@ -7,7 +7,8 @@ if __name__ == "__main__":
     tau_seq = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
 
     tau = Protein(tau_seq)
-    core = Peptide(tau_seq, (263, 399))
+    i_min, i_max = (263, 399)
+    core = Peptide(tau_seq, (i_min, i_max))
 
     CC = PeakList('CC', ('13C', '13C'))
     NCA = PeakList('NCA', ('13C', '15N'))
@@ -20,18 +21,32 @@ if __name__ == "__main__":
     # print(NCACB)
     # print(NCACB.get_assigned_peaks())
     # print(NCACB.get_unassigned_peaks())
+    thr_indices = [i for i in core.get_indices_of_amino_acid('Thr') if i in range(i_min, i_max+1)]
+    print(f"Thr indices: {thr_indices}") # [263, 319, 361, 373, 377, 386]
 
-    assign(NCACB, (60.08067,127.90678), 0, core, 319, 'Thr', 'CA')
-    assign(NCACB, (60.08067,127.90678), 1, core, 319, 'Thr', 'N')
-    assign(NCACB, (67.47906,127.83724), 0, core, 319, 'Thr', 'CB')
-    assign(NCACB, (67.47906,127.83724), 1, core, 319, 'Thr', 'N')
+    thr1_index = 386
+    core[thr1_index].assign_atom('C', Assignment(171.151, True))
+    core[thr1_index].assign_atom('N', Assignment(127.912, True))
+    core[thr1_index].assign_atom('CA', Assignment(60.063, True))
+    core[thr1_index].assign_atom('CB', Assignment(67.419, True))
+    # assign(NCACB, (60.08067,127.90678), 0, core, 319, 'Thr', 'CA')
+    # assign(NCACB, (60.08067,127.90678), 1, core, 319, 'Thr', 'N')
+    # assign(NCACB, (67.47906,127.83724), 0, core, 319, 'Thr', 'CB')
+    # assign(NCACB, (67.47906,127.83724), 1, core, 319, 'Thr', 'N')
 
     core[305].assign_atom('C', Assignment(172.812, True))
     core[305].assign_atom('N', Assignment(112.32, True))
     core[305].assign_atom('CA', Assignment(52.329, True))
     core[305].assign_atom('CB', Assignment(63.353, True))
 
-    start_index = 319
+    lys_indices = [i for i in core.get_indices_of_amino_acid('Lys') if i in range(i_min, i_max+1)]
+    print(f"Lys indices: {lys_indices}") # [267, 274, 280, 281, 290, 294, 298, 311, 317, 321, 331, 340, 343, 347, 353, 369, 370, 375, 383, 385, 395]
+    lys1_index = 290
+    core[lys1_index].assign_atom('CA', Assignment(56.365, True))
+    core[lys1_index].assign_atom('N', Assignment(127.471, True))
+    core[lys1_index].assign_atom('CB', Assignment(29.894, True))
+
+    start_index = thr1_index
 
     print(core[start_index])
     extend_assignment_left(core, start_index)
