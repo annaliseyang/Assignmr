@@ -1,0 +1,1220 @@
+Protein Sequence: Len = 441 MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL
+Peptide Sequence: Len = 136 (263, 399) ENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVV
+
+263 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: False
+CA: False
+CB: False
+CG2: False
+N: False
+264 
+Glu (E) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+265 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+266 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+267 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+268 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+269 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+270 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+271 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+272 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+273 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+274 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+275 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+276 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+277 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+278 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+279 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+280 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+281 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+282 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+283 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+284 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+285 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+286 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+287 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+288 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+289 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+290 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: Assignment(chemical_shift=56.365, tentative=True)
+CB: Assignment(chemical_shift=29.894, tentative=True)
+CD: False
+CE: False
+CG: False
+N: Assignment(chemical_shift=127.471, tentative=True)
+291 
+Cys (C) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+292 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+293 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+294 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+295 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+296 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+297 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+298 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+299 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+300 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+301 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+302 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+303 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+304 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+305 
+Ser (S) True
+Atoms: (4) C, CA, CB, N
+C: Assignment(chemical_shift=172.812, tentative=True)
+CA: Assignment(chemical_shift=52.329, tentative=True)
+CB: Assignment(chemical_shift=63.353, tentative=True)
+N: Assignment(chemical_shift=112.32, tentative=True)
+306 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+307 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+308 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+309 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+310 
+Tyr (Y) False
+Atoms: (10) C, CA, CB, CD1, CD2, CE1, CE2, CG, CZ, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CE1: False
+CE2: False
+CG: False
+CZ: False
+N: False
+311 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+312 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+313 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+314 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+315 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+316 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+317 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+318 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+319 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: False
+CA: False
+CB: False
+CG2: False
+N: False
+320 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+321 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+322 
+Cys (C) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+323 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+324 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+325 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+326 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+327 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+328 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+329 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+330 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+331 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+332 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+333 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+334 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+335 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+336 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+337 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+338 
+Glu (E) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+339 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+340 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+341 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+342 
+Glu (E) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+343 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+344 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+345 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+346 
+Phe (F) False
+Atoms: (10) C, CA, CB, CD1, CD2, CE1, CE2, CG, CZ, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CE1: False
+CE2: False
+CG: False
+CZ: False
+N: False
+347 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+348 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+349 
+Arg (R) False
+Atoms: (10) C, CA, CB, CD, CG, CZ, N, NE, NH1, NH2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+CZ: False
+N: False
+NE: False
+NH1: False
+NH2: False
+350 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+351 
+Gln (Q) False
+Atoms: (7) C, CA, CB, CD, CG, N, NE2
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+NE2: False
+352 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+353 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+354 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+355 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+356 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+357 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+358 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+359 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+360 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+361 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: False
+CA: False
+CB: False
+CG2: False
+N: False
+362 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+363 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+364 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+365 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+366 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+367 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+368 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+ND2: False
+369 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+370 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+371 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+372 
+Glu (E) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+373 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: False
+CA: False
+CB: False
+CG2: False
+N: False
+374 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+375 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+376 
+Leu (L) False
+Atoms: (7) C, CA, CB, CD1, CD2, CG, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CG: False
+N: False
+377 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: False
+CA: False
+CB: False
+CG2: False
+N: False
+378 
+Phe (F) False
+Atoms: (10) C, CA, CB, CD1, CD2, CE1, CE2, CG, CZ, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CE1: False
+CE2: False
+CG: False
+CZ: False
+N: False
+379 
+Arg (R) False
+Atoms: (10) C, CA, CB, CD, CG, CZ, N, NE, NH1, NH2
+C: Assignment(chemical_shift=173.24775, tentative=True)
+CA: Assignment(chemical_shift=55.78267, tentative=True)
+CB: Assignment(chemical_shift=28.98804, tentative=True)
+CD: Assignment(chemical_shift=41.75097, tentative=True)
+CG: Assignment(chemical_shift=28.98804, tentative=True)
+CZ: Assignment(chemical_shift=166.22503, tentative=True)
+N: Assignment(chemical_shift=126.29999999999879, tentative=True)
+NE: False
+NH1: False
+NH2: False
+380 
+Glu (E) True
+Atoms: (6) C, CA, CB, CD, CG, N
+C: Assignment(chemical_shift=173.74413, tentative=True)
+CA: Assignment(chemical_shift=55.78997, tentative=True)
+CB: Assignment(chemical_shift=29.56748, tentative=True)
+CD: Assignment(chemical_shift=180.42553, tentative=True)
+CG: Assignment(chemical_shift=36.98987, tentative=True)
+N: Assignment(chemical_shift=111.19999999999965, tentative=True)
+381 
+Asn (N) False
+Atoms: (6) C, CA, CB, CG, N, ND2
+C: Assignment(chemical_shift=172.48521, tentative=True)
+CA: Assignment(chemical_shift=52.43601, tentative=True)
+CB: Assignment(chemical_shift=41.52546, tentative=True)
+CG: Assignment(chemical_shift=172.4551, tentative=True)
+N: Assignment(chemical_shift=113.19999999999953, tentative=True)
+ND2: False
+382 
+Ala (A) True
+Atoms: (4) C, CA, CB, N
+C: Assignment(chemical_shift=174.39628, tentative=True)
+CA: Assignment(chemical_shift=51.18326, tentative=True)
+CB: Assignment(chemical_shift=17.55047, tentative=True)
+N: Assignment(chemical_shift=118.39999999999924, tentative=True)
+383 
+Lys (K) True
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: Assignment(chemical_shift=173.6745, tentative=True)
+CA: Assignment(chemical_shift=52.85696, tentative=True)
+CB: Assignment(chemical_shift=33.14779, tentative=True)
+CD: Assignment(chemical_shift=26.98447, tentative=True)
+CE: Assignment(chemical_shift=43.25932, tentative=True)
+CG: Assignment(chemical_shift=25.63681, tentative=True)
+N: Assignment(chemical_shift=120.59999999999911, tentative=True)
+384 
+Ala (A) True
+Atoms: (4) C, CA, CB, N
+C: Assignment(chemical_shift=174.39628, tentative=True)
+CA: Assignment(chemical_shift=51.50365, tentative=True)
+CB: Assignment(chemical_shift=17.55047, tentative=True)
+N: Assignment(chemical_shift=119.19999999999919, tentative=True)
+385 
+Lys (K) True
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: Assignment(chemical_shift=173.18353, tentative=True)
+CA: Assignment(chemical_shift=52.92832, tentative=True)
+CB: Assignment(chemical_shift=33.43153, tentative=True)
+CD: Assignment(chemical_shift=28.28354, tentative=True)
+CE: Assignment(chemical_shift=40.56393, tentative=True)
+CG: Assignment(chemical_shift=25.34856, tentative=True)
+N: Assignment(chemical_shift=120.19999999999914, tentative=True)
+386 
+Thr (T) False
+Atoms: (5) C, CA, CB, CG2, N
+C: Assignment(chemical_shift=171.151, tentative=True)
+CA: Assignment(chemical_shift=60.063, tentative=True)
+CB: Assignment(chemical_shift=67.419, tentative=True)
+CG2: False
+N: Assignment(chemical_shift=127.912, tentative=True)
+387 
+Asp (D) False
+Atoms: (5) C, CA, CB, CG, N
+C: False
+CA: False
+CB: False
+CG: False
+N: False
+388 
+His (H) False
+Atoms: (9) C, CA, CB, CD2, CE1, CG, N, ND1, NE2
+C: False
+CA: False
+CB: False
+CD2: False
+CE1: False
+CG: False
+N: False
+ND1: False
+NE2: False
+389 
+Gly (G) False
+Atoms: (3) C, CA, N
+C: False
+CA: False
+N: False
+390 
+Ala (A) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+391 
+Glu (E) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+392 
+Ile (I) False
+Atoms: (7) C, CA, CB, CD1, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CD1: False
+CG1: False
+CG2: False
+N: False
+393 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False
+394 
+Tyr (Y) False
+Atoms: (10) C, CA, CB, CD1, CD2, CE1, CE2, CG, CZ, N
+C: False
+CA: False
+CB: False
+CD1: False
+CD2: False
+CE1: False
+CE2: False
+CG: False
+CZ: False
+N: False
+395 
+Lys (K) False
+Atoms: (7) C, CA, CB, CD, CE, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CE: False
+CG: False
+N: False
+396 
+Ser (S) False
+Atoms: (4) C, CA, CB, N
+C: False
+CA: False
+CB: False
+N: False
+397 
+Pro (P) False
+Atoms: (6) C, CA, CB, CD, CG, N
+C: False
+CA: False
+CB: False
+CD: False
+CG: False
+N: False
+398 
+Val (V) False
+Atoms: (6) C, CA, CB, CG1, CG2, N
+C: False
+CA: False
+CB: False
+CG1: False
+CG2: False
+N: False

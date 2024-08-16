@@ -1,5 +1,5 @@
 import pandas as pd
-
+import pickle
 
 class AminoAcid:
     __amino_acid_dict = {
@@ -87,15 +87,11 @@ class AminoAcid:
 
         df_atoms = cs[condition]
         self.__atoms_assignments = { atom: False for atom in df_atoms['atom_id'].to_list() }
-
-
-    def __str__(self) -> str:
-        atoms_str = [ f"\033[1;33m{k}\033[0m" if v else f"{k}" for k, v in self.__atoms_assignments.items() ]
-        return f"{self.__three_letter_code} ({self.one_letter_code}) {self.is_assigned()}\nAtoms: ({len(atoms_str)}) {', '.join(atoms_str)}\n"
+        self.color = True
 
     def __str__(self) -> str:
         def format_string(string: str) -> str:
-            return f"\033[1;33m{string}\033[0m"
+            return f"\033[1;33m{string}\033[0m" if self.color else string
 
         atoms_str = [ format_string(f"{k}") if v else f"{k}" for k, v in self.__atoms_assignments.items() ]
         assignments_str = '\n'.join([ format_string(f"{k}: {v}") if v else f"{k}: {v}" for k, v in self.__atoms_assignments.items() ])
@@ -135,15 +131,37 @@ class AminoAcid:
 
 
 
+
 class Protein:
     def __init__(self, sequence: str) -> None:
         self.__sequence = sequence
         self.__amino_acids = [AminoAcid(id) for id in sequence]
 
+    def set_color(self, color: bool) -> None:
+        for aa in self.__amino_acids:
+            aa.color = color
 
     def __str__(self) -> str:
         str_amino_acids = [f"\n{index} {aa}" for index, aa in enumerate(self.__amino_acids)]
         return f"Protein Sequence: Len = {len(self.__sequence)} {self.__sequence}\n{''.join(str_amino_acids)}"
+
+    def from_pickle(file):
+        with open(file, 'rb') as f:
+            p = pickle.load(f)
+            f.close()
+            return p
+
+    def to_pickle(self, file):
+        with open(file, 'wb') as f:
+            pickle.dump(self, f)
+            f.close()
+
+    def to_txt(self, file):
+        with open(file, 'w') as f:
+            self.set_color(False)
+            f.write(str(self))
+            f.close()
+            self.set_color(True)
 
 
     def get_sequence(self) -> str:
@@ -200,6 +218,7 @@ class Peptide(Protein):
         if index < self.__range[0] or index >= self.__range[1]:
             raise IndexError( f"The parameter of index ({index}) is out of range {self.__range}!" )
         super().assign_atom(index, atom, assignment)
+
 
 
 if __name__ == "__main__":

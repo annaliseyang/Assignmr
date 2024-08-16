@@ -1,9 +1,32 @@
 from protein import *
 from assignment import *
+import time
 
 ##########################################################################################
 
+def main(protein, start_index, save):
+    """
+    Main function to recursively assign chemical shifts to the protein.
+    start index: a fully assigned amino acid where recursive assignments will start from.
+    """
+    start_time = time.time()
+    try:
+        print(protein[start_index])
+        extend_assignment_left(protein, start_index)
+        complete_assignment(protein, start_index - 1)
+    except Exception as e:
+        print(f"Error extending assignment: {e}")
+        protein.to_pickle(save + '.pkl')
+        protein.to_txt(save + '.txt')
+    finally:
+        run_time = time.time() - start_time
+        print(f"Run time: {run_time//60} minutes {run_time%60} seconds")
+
+
+
+
 if __name__ == "__main__":
+
     tau_seq = "MAEPRQEFEVMEDHAGTYGLGDRKDQGGYTMHQDQEGDTDAGLKESPLQTPTEDGSEEPGSETSDAKSTPTAEDVTAPLVDEGAPGKQAAAQPHTEIPEGTTAEEAGIGDTPSLEDEAAGHVTQARMVSKSKDGTGSDDKKAKGADGKTKIATPRGAAPPGQKGQANATRIPAKTPPAPKTPPSSGEPPKSGDRSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSSAKSRLQTAPVPMPDLKNVKSKIGSTENLKHQPGGGKVQIINKKLDLSNVQSKCGSKDNIKHVPGGGSVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL"
 
     tau = Protein(tau_seq)
@@ -48,9 +71,8 @@ if __name__ == "__main__":
 
     start_index = thr1_index
 
-    print(core[start_index])
-    extend_assignment_left(core, start_index)
-    complete_assignment(core, start_index - 1)
+    main(core, start_index, 'core')
+
 
     # assign(CONCA, (59.08024,126.09000,172.96581), 2, core, 318, 'Val', 'C')
     # assign(NCACB, (46.75326, 115.61445), 0, core, 300, 'Ala', 'CA')
@@ -63,7 +85,7 @@ if __name__ == "__main__":
     #     index -= 1
     #     break # break for testing
 
-    print(core[318])
+    # print(core[318])
     # print(core)
 
     # assign(NCACB, (58.82997,126.11562), 0, core, 318, 'Val', 'CA')
