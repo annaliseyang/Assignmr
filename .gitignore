@@ -1,8 +1,11 @@
 __pycache__/
-peak_lists/
-*backup*
+log/
 *test*
 .DS_Store
 *html
 .Rproj.user
 backup/
+.Rproj
+*.sh
+*.pkl
+*.txt
